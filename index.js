@@ -14,6 +14,11 @@ var snakeY = blockSize * 5;
 var foodX;
 var foodY;
 
+var velocityX = 0;
+var velocityY = 1;
+
+var isGame = true;
+
 window.onload = function() {
     board = document.getElementById("game-board");
     board.style.border = "2px solid white";
@@ -22,7 +27,16 @@ window.onload = function() {
     context = board.getContext("2d");
 
     placeFood();
-    update();
+    document.addEventListener("keyup", changeDirection);
+    document.addEventListener("keyup", (event) => {
+        if (event.key == "p") {
+            isGame = false;
+        }
+    })
+
+    if (isGame) {
+        setInterval(update, 1000/10);
+    }
 }
 
 function update() {
@@ -30,10 +44,35 @@ function update() {
     context.fillRect(0, 0, board.width, board.height);
 
     context.fillStyle = "lime";
-    context.fillRect(snakeX, snakeY, blockSize, blockSize)
+    snakeX += velocityX*blockSize;
+    snakeY += velocityY*blockSize;
+    context.fillRect(snakeX, snakeY, blockSize, blockSize);
 
     context.fillStyle = "red";
-    context.fillRect(foodX, foodY, blockSize, blockSize)
+    context.fillRect(foodX, foodY, blockSize, blockSize);
+    
+    if (snakeX == foodX && snakeY == foodY) {
+        placeFood()
+    }
+}
+
+function changeDirection(e) {
+    if (e.code == "ArrowUp" && velocityY == 0) {
+        velocityX = 0;
+        velocityY = -1;
+    }
+    else if (e.code == "ArrowDown" && velocityY == 0) {
+        velocityX = 0;
+        velocityY = 1;
+    }
+    else if (e.code == "ArrowRight" && velocityX == 0) {
+        velocityX = 1;
+        velocityY = 0;
+    }
+    else if (e.code == "ArrowLeft" && velocityX == 0) {
+        velocityX = -1;
+        velocityY = 0;
+    }
 }
 
 function placeFood() {
