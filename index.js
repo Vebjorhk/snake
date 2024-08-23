@@ -6,6 +6,9 @@ var cols = 20;
 var board;
 var context;
 
+var score = 0;
+var counter = document.getElementById("current-score");
+
 // snake head
 var snakeX = blockSize * 5;
 var snakeY = blockSize * 5;
@@ -15,7 +18,7 @@ var foodX;
 var foodY;
 
 var velocityX = 0;
-var velocityY = 1;
+var velocityY = 0;
 
 var snakeBody = [];
 
@@ -57,6 +60,8 @@ function update() {
     
     if (snakeX == foodX && snakeY == foodY) {
         snakeBody.push([foodX, foodY]);
+        score++;
+        counter.innerHTML = `Score: ${score}`;
         placeFood()
     }
 
@@ -83,13 +88,13 @@ function update() {
 
     if (snakeX < 0 || snakeX > cols * blockSize || snakeY < 0 || snakeY > rows * blockSize) {
         is_over = true;
-        alert("Game over")
+        counter.innerHTML = "Score: 0";
     }
 
     for (let index = 0; index < snakeBody.length; index++) {
         if (snakeBody[index][0] == snakeX && snakeBody[index][1] == snakeY) {
             is_over = true;
-            alert("Game over")
+            counter.innerHTML = "Score: 0";
         }
         
     }
